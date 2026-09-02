@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>BRG Storefront Design Tokens — V1 DS CURRENT</title>
+<style>
+  :root {
+    --border: #e5e7eb;
+    --text: #1a1d1e;
+    --text-light: #6b7280;
+    --bg-page: #f7f7f8;
+    --bg-panel: #ffffff;
+    --accent: #da2b1f;
+    --mono: "SF Mono", Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg-page);
+    color: var(--text);
+  }
+  header {
+    background: #1a1d1e;
+    color: #fff;
+    padding: 28px 40px 24px;
+  }
+  header h1 { margin: 0 0 6px 0; font-size: 22px; }
+  header p { margin: 0; color: #b8b8b8; font-size: 13px; }
+  header p.updated { margin-top: 6px; color: #7c7c7c; font-size: 11.5px; }
+  .layout { display: flex; }
+  nav {
+    width: 200px;
+    flex-shrink: 0;
+    padding: 20px 12px;
+    position: sticky;
+    top: 0;
+    align-self: flex-start;
+    height: 100vh;
+    overflow-y: auto;
+  }
+  nav a {
+    display: block;
+    padding: 7px 12px;
+    font-size: 13px;
+    color: var(--text);
+    text-decoration: none;
+    border-radius: 6px;
+  }
+  nav a:hover { background: #ececec; }
+  nav .nav-heading {
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-light);
+    padding: 14px 12px 4px;
+  }
+  main { flex: 1; padding: 28px 24px 80px; max-width: 1800px; min-width: 0; }
+  .toolbar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+  .toolbar input {
+    flex: 1;
+    min-width: 220px;
+    padding: 9px 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 13px;
+  }
+  .mode-toggle { display: flex; gap: 6px; flex-wrap: wrap; }
+  .mode-toggle button {
+    border: 1px solid var(--border);
+    background: #fff;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    cursor: pointer;
+    color: var(--text-light);
+  }
+  .mode-toggle button.active {
+    background: var(--text);
+    color: #fff;
+    border-color: var(--text);
+  }
+  section.group {
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+  section.group h2 {
+    font-size: 14px;
+    margin: 0;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border);
+    background: #fafafa;
+  }
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; table-layout: auto; }
+  thead th {
+    text-align: left;
+    font-weight: 600;
+    color: var(--text-light);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  tbody td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: middle;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: #fbfbfb; }
+  tbody tr.row-changed { background: #fbf7ff; }
+  tbody tr.row-issue { background: #fff8f6; }
+  .name { font-weight: 500; }
+  .code {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--text-light);
+    background: #f4f4f5;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  .swatch-cell { display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+  .swatch {
+    width: 18px; height: 18px; border-radius: 4px;
+    border: 1px solid rgba(0,0,0,0.1);
+    flex-shrink: 0;
+  }
+  .hex { font-family: var(--mono); font-size: 11.5px; color: var(--text-light); }
+  .alias { font-style: italic; color: #4338ca; font-size: 12px; }
+  .badge {
+    display: inline-block;
+    font-size: 9.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    padding: 2px 7px;
+    border-radius: 4px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+  .badge-changed { background: #ede9fe; color: #6d28d9; }
+  .badge-new { background: #dcfce7; color: #15803d; }
+  .badge-issue { background: #fee2e2; color: #b91c1c; }
+  .desc { font-size: 11.5px; color: var(--text-light); max-width: 260px; }
+  .desc .note { display: block; margin-top: 4px; color: #7c2d12; }
+  footer { padding: 20px 40px 60px; font-size: 12px; color: var(--text-light); }
+  .hidden { display: none !important; }
+
+  /* Changelog section */
+  .changelog {
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 22px 26px;
+    margin-bottom: 28px;
+  }
+  .changelog h2 { font-size: 16px; margin: 0 0 4px; }
+  .changelog > p.sub { font-size: 12.5px; color: var(--text-light); margin: 0 0 18px; }
+  .changelog h3 {
+    font-size: 12.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--text-light);
+    margin: 18px 0 8px;
+  }
+  .changelog ul { margin: 0 0 4px; padding-left: 20px; }
+  .changelog li { font-size: 13px; line-height: 1.55; margin-bottom: 8px; }
+  .changelog code {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    background: #f4f4f5;
+    padding: 1px 5px;
+    border-radius: 4px;
+  }
+  .legend { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 14px; font-size: 11.5px; color: var(--text-light); }
+  .legend span.badge { margin-left: 0; margin-right: 4px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>BRG Storefront Design Tokens — V1 DS CURRENT</h1>
+  <p>Figma Variables export · Storefront Tokens (5 brand modes) + Spacing Scale (Desktop / Compact) · source of truth: Confluence "Unified Design System Tokens for Storefronts"</p>
+  <p class="updated">Values pulled live from Figma file "V1 DS CURRENT" (lpaKeE3SSvz4cbGoCTMkwn) · last synced 2 Sept 2026</p>
+</header>
+
+<div class="layout">
+  <nav id="nav"></nav>
+  <main>
+
+    <div class="changelog" id="changelog">
+      <h2>What's changed since the Confluence import</h2>
+      <p class="sub">Confluence's "Unified Design System Tokens for Storefronts" is still the source of truth. Everything below is a deviation from it, grouped by why it changed. RB's brand-guide rebrand is the only sanctioned category of deviation — everything else is either a gap-fix (correcting the original import) or a brand-new addition.</p>
+
+      <h3>Red Balloon corrections — verified against RB's live storefront or its own brand guide</h3>
+      <ul>
+        <li><code>Grey Scale/grey-25</code> (RB): <code>#D5DEE4</code> → <code>#D9D9D9</code>. The Confluence value was never checked against RB specifically; <code>#D9D9D9</code> was confirmed from a live product-tile card border.</li>
+        <li><code>Text/text-primary-light</code> (RB): consolidated the different greys used for secondary text across the live storefront (crossed-out prices, review counts, star ratings, pagination dots) into one value, <code>#7C7C7C</code> — taken from the crossed-out price on the booking widget.</li>
+        <li><code>Backgrounds/bg-light-tint</code> (RB): set to <code>#FCF8F8</code> to match the tint used on the group booking page/component (the other four brands use <code>#F4F4F4</code>).</li>
+        <li><code>Grey Scale/grey-150</code>: deleted outright once its purpose moved to <code>text-primary-light</code>.</li>
+        <li><code>Brand/brand-primary-light</code> (RB): <code>#FDEAE8</code> — not a percentage-derived tint like the other four brands. This is the actual live colour already used for the nav-bar hover state on the current RB storefront, carried into Figma as-is.</li>
+        <li><code>Brand/brand-primary-dark</code> (RB): <code>#D8271B</code> — a deliberately moderate darkening of brand-primary, chosen to read as noticeably darker without going too dark, following the same restrained approach EXOZ takes with its own primary-dark/CTA hover treatment. Not a fixed blend percentage.</li>
+        <li><code>Text/text-primary</code>: horizontalised to <code>#000000</code> across all five brands (previously each brand carried a slightly different, visually-indistinguishable near-black) — agreed with dev so there's one value to maintain instead of five.</li>
+      </ul>
+
+      <h3>Red Balloon's new brand-guideline colours — not modifications of a prior value, genuinely new</h3>
+      <ul>
+        <li><code>Brand/brand-accent</code>, <code>brand-accent-dark</code>, <code>brand-accent-secondary</code>, <code>brand-accent-secondary-dark</code>: all four intake RB's new brand guidelines (Lemon Zest, its computed 30%-darker shade, Azure Blue, and its computed 30%-darker shade) rather than correcting a Confluence value — RB's brand guide didn't define this accent family before.</li>
+      </ul>
+
+      <h3>Cross-brand gap-fixes — correcting the original import, not deviating from it</h3>
+      <ul>
+        <li><code>Extra (try and avoid)/brand-accent-secondary-darker</code>, ENZ: unset placeholder <code>#000000</code> → <code>#57585C</code> (now consistent with EXOZ/ADR).</li>
+        <li><code>Extra (try and avoid)/ui-light-yellow</code>: created — didn't exist in the file before. EXOZ/ENZ = <code>#FFF67A</code>.</li>
+        <li><code>Extra (try and avoid)/ui-dark-blue</code>: created — same gap. EXOZ/ENZ = <code>#013378</code>.</li>
+        <li><code>Extra (try and avoid)/font-family-display</code>: now also carries ADR's <code>Monologue</code> value alongside ENZ's <code>Bicyclette</code>, absorbing the former <code>font-family-fancy</code> token, which was a duplicate of this one and has been removed.</li>
+        <li><code>Typography/font-weight-semibold</code> (RB): changed from 500 → 600, giving Inter a genuine semibold weight instead of reusing font-weight-medium's value.</li>
+      </ul>
+
+      <h3>New scales added this project — not part of the original Confluence import</h3>
+      <ul>
+        <li><b>Font-size scale</b> (9 tokens: <code>font-size-body-xxs</code> through <code>font-size-h1</code>): initially established for RB only — the other four brands' sizing was scattered/inconsistent at the time, so RB's scale was carried over to standardize all five. Currently identical across every brand — worth confirming whether any brand needs different sizing.</li>
+        <li><b>Corner-radius scale</b> (4 tokens): <code>radius-default</code>/<code>radius-button</code>/<code>radius-small</code> match the codebase usage audit's documented per-brand button corner radius exactly (EXOZ/ENZ 64px full pill, ADR 4px near-square, LA 6px). <code>radius-large</code> is a separate scale for non-button use cases — badges, decorators, banners.</li>
+        <li><b><code>Layout/border-primary</code> / <code>border-secondary</code></b>: two distinct border tokens — <code>border-primary</code> aliases to <code>Backgrounds/bg-black</code>, <code>border-secondary</code> (renamed from a duplicate "border-primary 2") aliases to <code>Grey Scale/grey-25</code> for a lighter option.</li>
+      </ul>
+
+      <h3>Resolved since the last sync</h3>
+      <ul>
+        <li><code>font-size-body-xs</code> naming collision (was showing as "font-size-body-xs 2") — renamed cleanly.</li>
+        <li><code>Layout/border-primary</code> duplicate — the second copy renamed to <code>border-secondary</code>, now two purposeful tokens instead of an accidental duplicate.</li>
+        <li>ADR corner-radius mismatch — <code>radius-default</code> (and everything aliasing to it) is now 4px, matching the audit.</li>
+        <li><code>Text/text-primary</code> EXOZ mismatch — moot now that all five brands are horizontalised to <code>#000000</code>.</li>
+        <li><code>Extra/font-family-fancy</code> ENZ bug — the token itself has been removed and consolidated into <code>font-family-display</code>, which now correctly holds both ADR's and ENZ's values.</li>
+        <li><code>brand-primary-light</code>/<code>-dark</code> (RB) authorship — confirmed: <code>light</code> is the live nav-bar hover colour carried in as-is (not a blend), and <code>dark</code> is a deliberately moderate darkening modeled on EXOZ's restrained CTA-hover treatment, not a fixed blend percentage.</li>
+        <li><b>Font-size scale</b> origin story — confirmed: established for RB only, then carried over to the other four brands because their own sizing was scattered/inconsistent at the time.</li>
+      </ul>
+
+      <h3>Open issues — not yet resolved</h3>
+      <ul>
+        <li><b><code>Semantic/ui-orange</code>.</b> Only Local Agent references this token (once, for an unrelated PDP info point — not a warning). The other four brands each use different hardcoded oranges for different elements instead of a shared token. Raised with dev to horizontalise usage the way ui-red/ui-green/ui-blue are used consistently everywhere — ties into the Notification component's warn-state inconsistency (icon/title/background don't agree, and title varies per brand) also raised with dev for this release.</li>
+        <li><b>All nine <code>Typography/font-size-*</code> Figma descriptions are stale.</b> Every one still says something like "Currently defined for Red Balloon only... other brands are set to 0 pending dev confirmation," but all five brands have carried RB's values since the scale was standardized — the description text was never updated to match. Worth a batch edit in Figma so the descriptions match reality.</li>
+        <li><b><code>Text/text-primary-light</code> (RB) further consolidation.</b> A recommendation to move RB from <code>#7C7C7C</code> to <code>#58575B</code> (matching ADR/LA) was discussed but never confirmed/executed.</li>
+      </ul>
+
+      <div class="legend">
+        <span><span class="badge badge-changed">Changed</span> value corrected from Confluence's original import</span>
+        <span><span class="badge badge-new">New</span> token added since the import, wasn't part of Confluence's spec</span>
+        <span><span class="badge badge-issue">Issue</span> known problem, not yet resolved</span>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <input id="search" type="text" placeholder="Filter by name or CSS variable…">
+      <div class="mode-toggle" id="modeToggle"></div>
+    </div>
+    <div id="groups"></div>
+  </main>
+</div>
+
+<footer>
+  Exported from Figma file "V1 DS CURRENT" · Naming and values are aligned to the Confluence source of truth — RB's brand-guide rebrand palette is the only sanctioned deviation. See "What's changed since the Confluence import" above for the full diff and open issues. This file is self-contained (no build step) — regenerate the two token arrays below from Figma and drop the file back in place to update.
+</footer>
+
+<script>
+const STOREFRONT_MODES = ["Red Balloon","EXOZ","ADR","ENZ","Local Agent"];
+const SPACING_MODES = ["Desktop","Compact"];
+
+const storefrontTokens = [{"name": "Brand/brand-primary", "type": "COLOR", "scopes": ["ALL_FILLS", "STROKE_COLOR"], "codeSyntax": "var(--brand-primary)", "description": "", "status": [], "note": "", "valuesByMode": {"Red Balloon": "#EE3124", "EXOZ": "#FAC532", "ADR": "#70EDFF", "ENZ": "#F15F26", "Local Agent": "#EB3300"}}, {"name": "Brand/brand-primary-light", "type": "COLOR", "scopes": ["ALL_FILLS", "STROKE_COLOR"], "codeSyntax": "var(--brand-primary-light)", "description": "", "status": ["changed"], "note": "RB: not a percentage-derived tint like the other four brands. This is the actual live colour already used for the nav-bar hover state on the current RB storefront \u2014 brought into Figma as-is rather than computed from brand-primary.", "valuesByMode": {"Red Balloon": "#FDEAE8", "EXOZ": "#FCE299", "ADR": "#D8FAFF", "ENZ": "#F79F7D", "Local Agent": "#FF4D1C"}}, {"name": "Brand/brand-primary-dark", "type": "COLOR", "scopes": ["ALL_FILLS", "STROKE_COLOR"], "codeSyntax": "var(--brand-primary-dark)", "description": "", "status": ["changed"], "note": "RB: a deliberately moderate darkening of brand-primary \u2014 chosen to be noticeably darker without going too dark, following the same restrained approach EXOZ takes with its own primary-dark/CTA hover treatment. Not derived from a fixed blend percentage.", "valuesByMode": {"Red Balloon": "#D8271B", "EXOZ": "#FCB403", "ADR": "#70EDFF", "ENZ": "#DB4D15", "Local Agent": "#C92C00"}}, {"name": "Brand/brand-secondary", "type": "COLOR", "scopes": ["ALL_FILLS", "STROKE_COLOR"], "codeSyntax": "var(--brand-secondary)", "description": "", "status": [], "note": "", "valuesByMode": {"Red Balloon": "#401410", "EXOZ": "#1A1D1E", "ADR": "#1A1A1A", "ENZ": "#1A1D1E", "Local Agent": "#313131"}}, {"name": "Brand/brand-secondary-light", "type": "COLOR", "scopes": ["ALL_FILLS", "STROKE_COLOR"], "codeSyntax": "var(--brand-secondary-light)", "description": "", "status": [], "note": "", "valuesByMode": {"Red Balloon": "#FFD2E5", "EXOZ": "#2C3133", "ADR": "#323232", "ENZ": "#2C3133", "Local Agent": "#464646"}}, {"name": "Brand/brand-secondary-dark", "type": "COLOR", "scopes": ["ALL_FILLS", "STROKE_COLOR"], "codeSyntax": "var(--brand-secondary-dark)", "description": "", "status": [], "note": "", "valuesByMode": {"Red Balloon": "#401410", "EXOZ": "#000000", "ADR": "#000000", "ENZ": "#000000", "Local Agent": "#242424"}}, {"name": "Brand/brand-accent", "type": "COLOR", "scopes": ["ALL_FILLS", "STROKE_COLOR"], "codeSyntax": "var(--brand-accent)", "description": "", "status": ["new"], "note": "New \u2014 RB's entire brand-accent family (accent, accent-dark, accent-secondary, accent-secondary-dark) intakes RB's new brand guidelines (Lemon Zest, Azure Blue, and their computed darker counterparts) rather than modifying a prior Confluence value.", "valuesByMode": {"Red Balloon": "#FFFFAA", "EXOZ": "#FAC532", "ADR": "#FF6F1C", "ENZ": "#3DC2CA", "Local Agent": "#EB3300"}}, {"name": "Brand/brand-accent-dark", "type": "COLOR", "scopes": ["ALL_FILLS", "STROKE_COLOR"], "codeSyntax": "var(--brand-accent-dark)", "description": "Hover/dark state of brand-accent. RB: computed 30% darker than Lemon Zest (brand-accent base) toward black, so it reads as the same hue family rather than an unrelated colour. Not a swatch defined in RB's own brand guide (which has no accent-dark pairing) \u2014 derived to keep the token pair internally coherent.", "status": ["new"], "note": "New \u2014 part of RB's new brand-guideline accent family. Computed as 30% darker than Lemon Zest (brand-accent), since RB's brand guide itself has no accent-dark swatch of its own.", "valuesByMode": {"Red Balloon": "#B3B377", "EXOZ": "#FCB403", "ADR": "#E76012", "ENZ": "#2AA3AA", "Local Agent": "#C92C00"}}, {"name": "Brand/brand-accent-secondary", "type": "COLOR", "scopes": ["ALL_FILLS", "STROKE_COLOR"], "codeSyntax": "var(--brand-accent-secondary)", "description": "RB: Azure Blue, one of RB's 6 brand-guide secondary colours (cleared for Campaigns/BAU). Previously set to Sea Foam, which the brand guide restricts to \u201cText and Scribbles only\u201d \u2014 not an appropriate fit for this token's background/surface role, so it was moved off.", "status": ["new"], "note": "New \u2014 Azure Blue, one of RB's 6 new brand-guide secondary colours (cleared for Campaigns/BAU), replacing the placeholder Sea Foam value used before RB's brand guidelines were formally adopted.", "valuesByMode": {"Red Balloon": "#C6E6FF", "EXOZ": "#C0DB83", "ADR": "#A6A8AB", "ENZ": "#C0DB83", "Local Agent": "#00A876"}}, {"name": "Brand/brand-accent-secondary-dark", "type": "COLOR", "scopes": ["ALL_FILLS", "STROKE_COLOR"], "codeSyntax": "var(--brand-accent-secondary-dark)", "description": "Hover/dark state of brand-accent-secondary. RB: computed 30% darker than Azure Blue (brand-accent-secondary base) toward black. Previously reused Jam Jar, an unrelated hue borrowed from brand-secondary/text-primary \u2014 replaced so the pair reads as light/dark of one colour.", "status": ["new"], "note": "New \u2014 computed as 30% darker than Azure Blue (brand-accent-secondary), part of RB's new brand-guideline accent family.", "valuesByMode": {"Red Balloon": "#8BA1B3", "EXOZ": "#AFD95E", "ADR": "#8C8F93", "ENZ": "#AFD95E", "Local Agent": "#009367"}}, {"name": "Text/text-primary", "type": "COLOR", "scopes": ["TEXT_FILL"], "codeSyntax": "var(--text-primary)", "description": "", "status": ["changed"], "note": "Horizontalised to #000000 across all five brands. Previously each brand carried a slightly different near-black shade that wasn't visually distinguishable \u2014 agreed with dev to standardise on a single value so it's easier to maintain.", "valuesByMode": {"Red Balloon": "#000000", "EXOZ": "#000000", "ADR": "#000000", "ENZ": "#000000", "Local Agent": "#000000"}}, {"name": "Text/text-secondary", "type": "COLOR", "scopes": ["TEXT_FILL"], "codeSyntax": "var(--text-secondary)", "description": "", "status": [], "note": "", "valuesByMode": {"Red Balloon": "#401410", "EXOZ": "#1A1D1E", "ADR": "#000000", "ENZ": "#1A1D1E", "Local Agent": "#313131"}}, {"name": "Text/text-primary-light", "type": "COLOR", "scopes": ["TEXT_FILL"], "codeSyntax": "var(--text-primary-light)", "description": "", "status": ["changed"], "note": "RB: consolidated the different greys used for secondary/de-emphasised text across the live storefront (crossed-out prices, review counts, star ratings, pagination dots) into one value \u2014 #7C7C7C, taken from the crossed-out price on the booking widget.", "valuesByMode": {"Red Balloon": "#7C7C7C", "EXOZ": "#707070", "ADR": "#58575B", "ENZ": "#707070", "Local Agent": "#58575B"}}, {"name": "Text/text-inverse", "type": "COLOR", "scopes": ["TEXT_FILL"], "codeSyntax": "var(--text-inverse)", "description": "", "status": [], "note": "", "valuesByMode": {"Red Balloon": "#FCF8F8", "EXOZ": "#FFFFFF", "ADR": "#FFFFFF", "ENZ": "#FFFFFF", "Local Agent": "#FFFFFF"}}, {"name": "Text/text-disabled", "type": "COLOR", "scopes": ["TEXT_FILL"], "codeSyntax": "var(--text-disabled)", "description": "", "status": [], "note": "", "valuesByMode": {"Red Balloon": "#91929D", "EXOZ": "#B8B8B8", "ADR": "#BABABA", "ENZ": "#B8B8B8", "Local Agent": "#BABABA"}}, {"name": "Backgrounds/bg-white", "type": "COLOR", "scopes": ["FRAME_FILL", "SHAPE_FILL"], "codeSyntax": "var(--bg-white)", "description": "", "status": [], "note": "", "valuesByMode": {"Red Balloon": "#FFFFFF", "EXOZ": "#FFFFFF", "ADR": "#FFFFFF", "ENZ": "#FFFFFF", "Local Agent": "#FFFFFF"}}, {"name": "Backgrounds/bg-black", "type": "COLOR", "scopes": ["FRAME_FILL", "SHAPE_FILL"], "codeSyntax": "var(--bg-black)", "description": "", "status": [], "note": "", "valuesByMode": {"Red Balloon": "#1A191A", "EXOZ": "#000000", "ADR": "#1A1A1A", "ENZ": "#000000", "Local Agent": "#313131"}}, {"name": "Backgrounds/bg-disabled", "type": "COLOR", "scopes": ["FRAME_FILL", "SHAPE_FILL"], "codeSyntax": "var(--bg-disabled)", "description": "", "status": [], "note": "", "valuesByMode": {"Red Balloon": "#D1D2D4", "EXOZ": "#E7E7E7", "ADR": "#E4E4E4", "ENZ": "#E7E7E7", "Local Agent": "#E4E4E4"}}, {"name": "Backgrounds/bg-primary-grey", "type": "COLOR", "scopes": ["FRAME_FILL", "SHAPE_FILL"], "codeSyntax": "var(--bg-primary-grey)", "description": "", "status": [], "note": "", "valuesByMode": {"Red Balloon": "#FDFBFB", "EXOZ": "#FAFAFA", "ADR": "#F2F1F3", "ENZ": "#FAFAFA", "Local Agent": "#FAFBFC"}}, {"name": "Backgrounds/bg-coupon-badge", "type": "COLOR", "scopes": ["FRAME_FILL", "SHAPE_FILL"], "codeSyntax": "var(--bg-coupon-badge)", "description": "", "status": [], "note": "", "valuesByMode": {"Red Balloon": "#FFF0EC", "EXOZ": "#FFF0EC", "ADR": "#FFF0EC", "ENZ": "#F4EFEA", "Local Agent": "#FFF0EC"}}, {"name": "Backgrounds/bg-light-tint", "type": "COLOR", "scopes": ["FRAME_FILL", "SHAPE_FILL"], "codeSyntax": "var(--bg-light-tint)", "description": "", "status": ["changed"], "note": "RB: set to #FCF8F8 to match the tint used on the group booking page/component \u2014 differs intentionally from the other four brands' #F4F4F4.", "valuesByMode": {"Red Balloon": "#FCF8F8", "EXOZ": "#F4F4F4", "ADR": "#F4F4F4", "ENZ": "#F4F4F4", "Local Agent": "#F4F4F4"}}, {"name": "Grey Scale/grey-100", "type": "COLOR", "scopes": ["ALL_FILLS", "STROKE_COLOR"], "codeSyntax": "var(--grey-100)", "description": "", "status": [], "note": "", "valuesByMode": {"Red Balloon": "#91929D", "EXOZ": "#707070", "ADR": "#A6A8AB", "ENZ": "#707070", "Local Agent": "#A6A8AB"}}, {"name": "Grey Scale/grey-50", "type": "COLOR", "scopes": ["ALL_FILLS", "STROKE_COLOR"], "codeSyntax": "var(--grey-50)", "description": "", "status": [], "note": "", "valuesByMode": {"Red Balloon": "#AFAFAF", "EXOZ": "#A6A8AB", "ADR": "#D3D4D5", "ENZ": "#A6A8AB", "Local Agent": "#D3D4D5"}}, {"name": "Grey Scale/grey-25", "type": "COLOR", "scopes": ["ALL_FILLS", "STROKE_COLOR"], "codeSyntax": "var(--grey-25)", "description": "Default border/divider colour (matches this token's role platform-wide: 75 uses on EXOZ, 45 on LA, 40 shared, 39 on ADR per the codebase usage audit). RB value corrected 21 Aug 2026: the previous value (#D5DEE4) was carried over from Confluence and never verified against the live RB site. #D9D9D9 was confirmed directly from a live RB product tile card border (product-tile-portrait-v1 frame) and applied here as the source of truth going forward.", "status": ["changed"], "note": "RB: #D5DEE4 \u2192 #D9D9D9, confirmed from a live product-tile border.", "valuesByMode": {"Red Balloon": "#D9D9D9", "EXOZ": "#E5E7EB", "ADR": "#E9E9EA", "ENZ": "#E5E7EB", "Local Agent": "#E9E9EA"}}, {"name": "Grey Scale/grey-20", "type": "COLOR", "scopes": ["ALL_FILLS", "STROKE_COLOR"], "codeSyntax": "var(--grey-20)", "description": "", "status": [], "note": "", "valuesByMode": {"Red Balloon": "#C8CDD1", "EXOZ": "#D1D2D4", "ADR": "#D1D2D4", "ENZ": "#D1D2D4", "Local Agent": "#D1D2D4"}}, {"name": "Grey Scale/grey-10", "type": "COLOR", "scopes": ["ALL_FILLS", "STROKE_COLOR"], "codeSyntax": "var(--grey-10)", "description": "", "status": [], "note": "", "valuesByMode": {"Red Balloon": "#F4F4F4", "EXOZ": "#F6F6F6", "ADR": "#F6F6F7", "ENZ": "#F6F6F6", "Local Agent": "#F6F6F7"}}, {"name": "Semantic/sale", "type": "COLOR", "scopes": ["ALL_FILLS", "STROKE_COLOR"], "codeSyntax": "var(--sale)", "description": "", "status": [], "note": "", "valuesByMode": {"Red Balloon": "#EE3124", "EXOZ": "#BF472E", "ADR": "#AF121D", "ENZ": "#BF472E", "Local Agent": "#F58262"}}, {"name": "Semantic/ui-red", "type": "COLOR", "scopes": ["ALL_FILLS", "STROKE_COLOR"], "codeSyntax": "var(--ui-red)", "description": "", "status": [], "note": "", "valuesByMode": {"Red Balloon": "#B82626", "EXOZ": "#B82626", "ADR": "#B82626", "ENZ": "#B82626", "Local Agent": "#B82626"}}, {"name": "Semantic/ui-orange", "type": "COLOR", "scopes": ["ALL_FILLS", "STROKE_COLOR"], "codeSyntax": "var(--ui-orange)", "description": "", "status": ["issue"], "note": "Only Local Agent references this token (once, and for an unrelated PDP info point \u2014 not a warning). The other four brands each use different hardcoded oranges for different page elements instead of a shared token. Needs discussion with dev to horizontalise usage the way ui-red/ui-green/ui-blue are used consistently everywhere \u2014 ties into the Notification warn-state inconsistency already raised with dev for this release.", "valuesByMode": {"Red Balloon": "#E68320", "EXOZ": "#E68320", "ADR": "#E68320", "ENZ": "#E68320", "Local Agent": "#E68320"}}, {"name": "Semantic/ui-green", "type": "COLOR", "scopes": ["ALL_FILLS", "STROKE_COLOR"], "codeSyntax": "var(--ui-green)", "description": "", "status": [], "note": "", "valuesByMode": {"Red Balloon": "#68B30A", "EXOZ": "#68B30A", "ADR": "#68B30A", "ENZ": "#68B30A", "Local Agent": "#377F08"}}, {"name": "Semantic/ui-blue", "type": "COLOR", "scopes": ["ALL_FILLS", "STROKE_COLOR"], "codeSyntax": "var(--ui-blue)", "description": "", "status": [], "note": "", "valuesByMode": {"Red Balloon": "#2A93D5", "EXOZ": "#2A93D5", "ADR": "#2A93D5", "ENZ": "#2A93D5", "Local Agent": "#2A93D5"}}, {"name": "Typography/font-weight-light", "type": "FLOAT", "scopes": ["FONT_WEIGHT"], "codeSyntax": "var(--font-weight-light)", "description": "", "status": [], "note": "", "valuesByMode": {"Red Balloon": 300, "EXOZ": 300, "ADR": 300, "ENZ": 300, "Local Agent": 300}}, {"name": "Typography/font-weight-regular", "type": "FLOAT", "scopes": ["FONT_WEIGHT"], "codeSyntax": "var(--font-weight-regular)", "description": "", "status": [], "note": "", "valuesByMode": {"Red Balloon": 400, "EXOZ": 400, "ADR": 400, "ENZ": 400, "Local Agent": 400}}, {"name": "Typography/font-weight-medium", "type": "FLOAT", "scopes": ["FONT_WEIGHT"], "codeSyntax": "var(--font-weight-medium)", "description": "", "status": [], "note": "", "valuesByMode": {"Red Balloon": 500, "EXOZ": 500, "ADR": 500, "ENZ": 500, "Local Agent": 600}}, {"name": "Typography/font-weight-semibold", "type": "FLOAT", "scopes": ["FONT_WEIGHT"], "codeSyntax": "var(--font-weight-semibold)", "description": "", "status": ["changed"], "note": "RB changed from 500 \u2192 600 to give Inter a genuine semibold weight (previously RB reused font-weight-medium's 500 value).", "valuesByMode": {"Red Balloon": 600, "EXOZ": 500, "ADR": 700, "ENZ": 600, "Local Agent": 600}}, {"name": "Typography/font-weight-bold", "type": "FLOAT", "scopes": ["FONT_WEIGHT"], "codeSyntax": "var(--font-weight-bold)", "description": "", "status": [], "note": "", "valuesByMode": {"Red Balloon": 700, "EXOZ": 700, "ADR": 700, "ENZ": 700, "Local Agent": 700}}, {"name": "Typography/font-family-body", "type": "STRING", "scopes": ["FONT_FAMILY"], "codeSyntax": "var(--font-family-body)", "description": "", "status": [], "note": "", "valuesByMode": {"Red Balloon": "Inter", "EXOZ": "Figtree", "ADR": "DM Sans", "ENZ": "Montserrat", "Local Agent": "Open Sans"}}, {"name": "Typography/font-family-heading", "type": "STRING", "scopes": ["FONT_FAMILY"], "codeSyntax": "var(--font-family-heading)", "description": "", "status": [], "note": "", "valuesByMode": {"Red Balloon": "Bennet Display", "EXOZ": "Figtree", "ADR": "Din Condensed", "ENZ": "Montserrat", "Local Agent": "Open Sans"}}, {"name": "Typography/font-heading-weight", "type": "FLOAT", "scopes": ["FONT_WEIGHT"], "codeSyntax": "var(--font-heading-weight)", "description": "Heading font-weight, aliased to font-weight-bold for every brand.", "status": [], "note": "", "valuesByMode": {"Red Balloon": "\u2192 Typography/font-weight-bold (700)", "EXOZ": "\u2192 Typography/font-weight-bold (700)", "ADR": "\u2192 Typography/font-weight-bold (700)", "ENZ": "\u2192 Typography/font-weight-bold (700)", "Local Agent": "\u2192 Typography/font-weight-bold (700)"}}, {"name": "Typography/font-size-body-xxs", "type": "FLOAT", "scopes": ["FONT_SIZE"], "codeSyntax": "var(--font-size-body-xxs)", "description": "Font-size scale token.", "status": ["new"], "note": "Added by Linh, Sept 2026 \u2014 the font-size scale wasn't part of the original Confluence import. It was initially established for RB only; the other four brands' font sizes were scattered/inconsistent at the time, so RB's scale was carried over to all five brands to standardize it. Currently identical across all five; confirm whether any brand needs different sizing.", "valuesByMode": {"Red Balloon": 10, "EXOZ": 10, "ADR": 10, "ENZ": 10, "Local Agent": 10}}, {"name": "Typography/font-size-body-sm", "type": "FLOAT", "scopes": ["FONT_SIZE"], "codeSyntax": "var(--font-size-body-sm)", "description": "Font-size scale token.", "status": ["new"], "note": "Added by Linh, Sept 2026 \u2014 see font-size-body-xxs note.", "valuesByMode": {"Red Balloon": 14, "EXOZ": 14, "ADR": 14, "ENZ": 14, "Local Agent": 14}}, {"name": "Typography/font-size-body", "type": "FLOAT", "scopes": ["FONT_SIZE"], "codeSyntax": "var(--font-size-body)", "description": "Font-size scale token.", "status": ["new"], "note": "Added by Linh, Sept 2026 \u2014 see font-size-body-xxs note.", "valuesByMode": {"Red Balloon": 16, "EXOZ": 16, "ADR": 16, "ENZ": 16, "Local Agent": 16}}, {"name": "Typography/font-size-body-lg", "type": "FLOAT", "scopes": ["FONT_SIZE"], "codeSyntax": "var(--font-size-body-lg)", "description": "Font-size scale token.", "status": ["new"], "note": "Added by Linh, Sept 2026 \u2014 see font-size-body-xxs note.", "valuesByMode": {"Red Balloon": 18, "EXOZ": 18, "ADR": 18, "ENZ": 18, "Local Agent": 18}}, {"name": "Typography/font-size-h5", "type": "FLOAT", "scopes": ["FONT_SIZE"], "codeSyntax": "var(--font-size-h5)", "description": "Font-size scale token.", "status": ["new"], "note": "Added by Linh, Sept 2026 \u2014 see font-size-body-xxs note.", "valuesByMode": {"Red Balloon": 20, "EXOZ": 20, "ADR": 20, "ENZ": 20, "Local Agent": 20}}, {"name": "Typography/font-size-h4", "type": "FLOAT", "scopes": ["FONT_SIZE"], "codeSyntax": "var(--font-size-h4)", "description": "Font-size scale token.", "status": ["new"], "note": "Added by Linh, Sept 2026 \u2014 see font-size-body-xxs note.", "valuesByMode": {"Red Balloon": 24, "EXOZ": 24, "ADR": 24, "ENZ": 24, "Local Agent": 24}}, {"name": "Typography/font-size-h3", "type": "FLOAT", "scopes": ["FONT_SIZE"], "codeSyntax": "var(--font-size-h3)", "description": "Font-size scale token.", "status": ["new"], "note": "Added by Linh, Sept 2026 \u2014 see font-size-body-xxs note.", "valuesByMode": {"Red Balloon": 32, "EXOZ": 32, "ADR": 32, "ENZ": 32, "Local Agent": 32}}, {"name": "Typography/font-size-h2", "type": "FLOAT", "scopes": ["FONT_SIZE"], "codeSyntax": "var(--font-size-h2)", "description": "Font-size scale token.", "status": ["new"], "note": "Added by Linh, Sept 2026 \u2014 see font-size-body-xxs note.", "valuesByMode": {"Red Balloon": 40, "EXOZ": 40, "ADR": 40, "ENZ": 40, "Local Agent": 40}}, {"name": "Typography/font-size-h1", "type": "FLOAT", "scopes": ["FONT_SIZE"], "codeSyntax": "var(--font-size-h1)", "description": "Font-size scale token.", "status": ["new"], "note": "Added by Linh, Sept 2026 \u2014 see font-size-body-xxs note.", "valuesByMode": {"Red Balloon": 48, "EXOZ": 48, "ADR": 48, "ENZ": 48, "Local Agent": 48}}, {"name": "Typography/font-size-body-xs", "type": "FLOAT", "scopes": ["FONT_SIZE"], "codeSyntax": "var(--font-size-body-xs)", "description": "Font-size scale token.", "status": ["new"], "note": "Added by Linh, Sept 2026 \u2014 see font-size-body-xxs note. (Renamed from a duplicate-suffixed \"font-size-body-xs 2\".)", "valuesByMode": {"Red Balloon": 12, "EXOZ": 12, "ADR": 12, "ENZ": 12, "Local Agent": 12}}, {"name": "Layout/border-primary", "type": "COLOR", "scopes": ["STROKE_COLOR"], "codeSyntax": "var(--border-primary)", "description": "", "status": ["new"], "note": "Added by Linh, Sept 2026 \u2014 aliases to Backgrounds/bg-black. Its former duplicate (auto-suffixed \"2\" by Figma) has been renamed to border-secondary, so this one keeps the plain name.", "valuesByMode": {"Red Balloon": "\u2192 Backgrounds/bg-black (#1A191A)", "EXOZ": "\u2192 Backgrounds/bg-black (#000000)", "ADR": "\u2192 Backgrounds/bg-black (#1A1A1A)", "ENZ": "\u2192 Backgrounds/bg-black (#000000)", "Local Agent": "\u2192 Backgrounds/bg-black (#313131)"}}, {"name": "Layout/border-secondary", "type": "COLOR", "scopes": ["STROKE_COLOR"], "codeSyntax": "var(--border-primary)", "description": "", "status": ["new"], "note": "Added by Linh, Sept 2026 (renamed from a duplicate \"border-primary 2\") \u2014 aliases to Grey Scale/grey-25, a lighter secondary border option distinct from border-primary.", "valuesByMode": {"Red Balloon": "\u2192 Grey Scale/grey-25 (#D9D9D9)", "EXOZ": "\u2192 Grey Scale/grey-25 (#E5E7EB)", "ADR": "\u2192 Grey Scale/grey-25 (#E9E9EA)", "ENZ": "\u2192 Grey Scale/grey-25 (#E5E7EB)", "Local Agent": "\u2192 Grey Scale/grey-25 (#E9E9EA)"}}, {"name": "Layout/radius-default", "type": "FLOAT", "scopes": ["CORNER_RADIUS"], "codeSyntax": "var(--radius-default)", "description": "", "status": ["new"], "note": "Added by Linh, Sept 2026 \u2014 ADR is now 4px, matching the codebase usage audit's documented primary-button corner radius.", "valuesByMode": {"Red Balloon": 8, "EXOZ": 8, "ADR": 4, "ENZ": 8, "Local Agent": 4}}, {"name": "Layout/radius-button", "type": "FLOAT", "scopes": ["CORNER_RADIUS"], "codeSyntax": "var(--radius-button)", "description": "", "status": ["new"], "note": "Added by Linh, Sept 2026. EXOZ/ENZ 64px and LA 6px match the audit's \"Primary button \u2192 Corner Radius\" row exactly; ADR aliases to radius-default (4px), also matching the audit.", "valuesByMode": {"Red Balloon": 64, "EXOZ": 64, "ADR": "\u2192 Layout/radius-default (4)", "ENZ": 64, "Local Agent": 6}}, {"name": "Layout/radius-large", "type": "FLOAT", "scopes": ["CORNER_RADIUS"], "codeSyntax": "var(--radius-large)", "description": "", "status": ["new"], "note": "Added by Linh, Sept 2026 as a separate scale for non-button corner-radius use cases \u2014 badges, decorators, banners \u2014 rather than buttons specifically.", "valuesByMode": {"Red Balloon": 20, "EXOZ": 20, "ADR": 20, "ENZ": 20, "Local Agent": 6}}, {"name": "Layout/radius-small", "type": "FLOAT", "scopes": ["CORNER_RADIUS"], "codeSyntax": "var(--radius-small)", "description": "", "status": ["new"], "note": "Added by Linh, Sept 2026. ADR aliases to radius-default (4px).", "valuesByMode": {"Red Balloon": 4, "EXOZ": 4, "ADR": "\u2192 Layout/radius-default (4)", "ENZ": 4, "Local Agent": 4}}, {"name": "Extra (try and avoid)/virgin-red", "type": "COLOR", "scopes": ["ALL_FILLS", "STROKE_COLOR"], "codeSyntax": "var(--virgin-red)", "description": "Storefront-specific extra variable. Applies to: EXOZ only (Virgin Australia Velocity partnership).", "status": [], "note": "", "valuesByMode": {"Red Balloon": "#000000", "EXOZ": "#E10A0A", "ADR": "#000000", "ENZ": "#000000", "Local Agent": "#000000"}}, {"name": "Extra (try and avoid)/input-border", "type": "COLOR", "scopes": ["ALL_FILLS", "STROKE_COLOR"], "codeSyntax": "var(--input-border)", "description": "Storefront-specific extra variable. Applies to: EXOZ, ENZ. Form field borders.", "status": [], "note": "", "valuesByMode": {"Red Balloon": "#000000", "EXOZ": "#E5E7EB", "ADR": "#000000", "ENZ": "#A3A3A3", "Local Agent": "#000000"}}, {"name": "Extra (try and avoid)/brand-accent-secondary-darker", "type": "COLOR", "scopes": ["ALL_FILLS", "STROKE_COLOR"], "codeSyntax": "var(--brand-accent-secondary-darker)", "description": "Storefront-specific extra variable (from Confluence \u201cExtra Variables\u201d section) \u2014 try and avoid using in shared components. Applies to: EXOZ, ADR.", "status": ["changed"], "note": "ENZ mode was an unset placeholder (#000000) \u2014 fixed to #57585C to match EXOZ/ADR.", "valuesByMode": {"Red Balloon": "#000000", "EXOZ": "#57585C", "ADR": "#57585C", "ENZ": "#57585C", "Local Agent": "#000000"}}, {"name": "Extra (try and avoid)/brand-accent-light", "type": "COLOR", "scopes": ["ALL_FILLS", "STROKE_COLOR"], "codeSyntax": "var(--brand-accent-light)", "description": "Storefront-specific extra variable. Applies to: ENZ only (member hero).", "status": [], "note": "", "valuesByMode": {"Red Balloon": "#000000", "EXOZ": "#000000", "ADR": "#000000", "ENZ": "#69D8DF", "Local Agent": "#000000"}}, {"name": "Extra (try and avoid)/border", "type": "COLOR", "scopes": ["ALL_FILLS", "STROKE_COLOR"], "codeSyntax": "var(--border)", "description": "Storefront-specific extra variable. Applies to: Local Agent only (generic borders).", "status": [], "note": "", "valuesByMode": {"Red Balloon": "#000000", "EXOZ": "#000000", "ADR": "#000000", "ENZ": "#000000", "Local Agent": "#E9E9EA"}}, {"name": "Extra (try and avoid)/ui-light-yellow", "type": "COLOR", "scopes": ["ALL_FILLS"], "codeSyntax": "var(--ui-light-yellow)", "description": "Storefront-specific extra variable. Applies to: EXOZ, ENZ (shares EXOZ code). One product-card badge variant on listing pages. Not used on ADR/LA.", "status": ["new"], "note": "Created this project \u2014 did not exist in the original Confluence import.", "valuesByMode": {"Red Balloon": "#000000", "EXOZ": "#FFF67A", "ADR": "#000000", "ENZ": "#FFF67A", "Local Agent": "#000000"}}, {"name": "Extra (try and avoid)/ui-dark-blue", "type": "COLOR", "scopes": ["ALL_FILLS"], "codeSyntax": "var(--ui-dark-blue)", "description": "Storefront-specific extra variable. Applies to: EXOZ, ENZ (shares EXOZ code). One product-card badge variant on listing pages. Not used on ADR/LA.", "status": ["new"], "note": "Created this project \u2014 did not exist in the original Confluence import.", "valuesByMode": {"Red Balloon": "#000000", "EXOZ": "#013378", "ADR": "#000000", "ENZ": "#013378", "Local Agent": "#000000"}}, {"name": "Extra (try and avoid)/font-family-display", "type": "STRING", "scopes": ["FONT_FAMILY"], "codeSyntax": "var(--font-family-display)", "description": "Storefront-specific extra variable. Applies to: ADR (Monologue, decorative headings) and ENZ (Bicyclette, H1 typeface used on every ENZ page regardless of white-label heading font settings).", "status": ["changed"], "note": "Consolidated: previously ENZ-only (Bicyclette). Now also carries ADR's Monologue value, absorbing the former font-family-fancy token, which was a duplicate of this one.", "valuesByMode": {"Red Balloon": "n/a", "EXOZ": "n/a", "ADR": "Monologue", "ENZ": "Bicyclette", "Local Agent": "n/a"}}];
+const spacingTokens = [{"name": "xxxs", "type": "FLOAT", "scopes": ["WIDTH_HEIGHT", "GAP"], "codeSyntax": "var(--spacing-xxxs)", "description": "8pt-grid spacing scale token.", "status": [], "note": "", "valuesByMode": {"Desktop": 4, "Compact": 2}}, {"name": "xxs", "type": "FLOAT", "scopes": ["WIDTH_HEIGHT", "GAP"], "codeSyntax": "var(--spacing-xxs)", "description": "8pt-grid spacing scale token.", "status": [], "note": "", "valuesByMode": {"Desktop": 8, "Compact": 4}}, {"name": "xs", "type": "FLOAT", "scopes": ["WIDTH_HEIGHT", "GAP"], "codeSyntax": "var(--spacing-xs)", "description": "8pt-grid spacing scale token.", "status": [], "note": "", "valuesByMode": {"Desktop": 12, "Compact": 8}}, {"name": "s", "type": "FLOAT", "scopes": ["WIDTH_HEIGHT", "GAP"], "codeSyntax": "var(--spacing-s)", "description": "8pt-grid spacing scale token.", "status": [], "note": "", "valuesByMode": {"Desktop": 16, "Compact": 12}}, {"name": "m", "type": "FLOAT", "scopes": ["WIDTH_HEIGHT", "GAP"], "codeSyntax": "var(--spacing-m)", "description": "8pt-grid spacing scale token.", "status": [], "note": "", "valuesByMode": {"Desktop": 24, "Compact": 16}}, {"name": "l", "type": "FLOAT", "scopes": ["WIDTH_HEIGHT", "GAP"], "codeSyntax": "var(--spacing-l)", "description": "8pt-grid spacing scale token.", "status": [], "note": "", "valuesByMode": {"Desktop": 32, "Compact": 24}}, {"name": "xl", "type": "FLOAT", "scopes": ["WIDTH_HEIGHT", "GAP"], "codeSyntax": "var(--spacing-xl)", "description": "8pt-grid spacing scale token.", "status": [], "note": "", "valuesByMode": {"Desktop": 40, "Compact": 32}}, {"name": "xxl", "type": "FLOAT", "scopes": ["WIDTH_HEIGHT", "GAP"], "codeSyntax": "var(--spacing-xxl)", "description": "8pt-grid spacing scale token.", "status": [], "note": "", "valuesByMode": {"Desktop": 56, "Compact": 40}}, {"name": "xxxl", "type": "FLOAT", "scopes": ["WIDTH_HEIGHT", "GAP"], "codeSyntax": "var(--spacing-xxxl)", "description": "8pt-grid spacing scale token.", "status": [], "note": "", "valuesByMode": {"Desktop": 80, "Compact": 48}}];
+
+function groupKey(name) {
+  const idx = name.indexOf('/');
+  return idx === -1 ? 'Other' : name.slice(0, idx);
+}
+function leafName(name) {
+  const idx = name.indexOf('/');
+  return idx === -1 ? name : name.slice(idx + 1);
+}
+
+function renderAliasOrValue(raw, type) {
+  if (raw === null || raw === undefined) return '<span class="hex">—</span>';
+  if (typeof raw === 'string' && raw.startsWith('→')) {
+    const m = raw.match(/^→ (.+?) \((.+)\)$/);
+    if (m) {
+      const target = m[1];
+      const val = m[2];
+      if (val.startsWith('#')) {
+        return `<span class="swatch-cell"><span class="swatch" style="background:${val}"></span><span class="alias">→ ${target}</span></span>`;
+      }
+      return `<span class="alias">→ ${target} (${val})</span>`;
+    }
+    return `<span class="alias">${raw}</span>`;
+  }
+  if (type === 'COLOR' && typeof raw === 'string' && raw.startsWith('#')) {
+    return `<span class="swatch-cell"><span class="swatch" style="background:${raw}"></span><span class="hex">${raw}</span></span>`;
+  }
+  return `<span class="hex">${raw}</span>`;
+}
+
+function badgesFor(status) {
+  return (status || []).map(s => `<span class="badge badge-${s}">${s}</span>`).join('');
+}
+
+function rowClass(status) {
+  if ((status || []).includes('issue')) return 'row-issue';
+  if ((status || []).includes('changed')) return 'row-changed';
+  return '';
+}
+
+function buildCollectionHTML(collectionName, modes, variables) {
+  const groups = {};
+  for (const v of variables) {
+    const g = groupKey(v.name);
+    (groups[g] = groups[g] || []).push(v);
+  }
+  let html = '';
+  for (const [groupName, vars] of Object.entries(groups)) {
+    const anchor = (collectionName + '-' + groupName).replace(/[^a-zA-Z0-9]+/g, '-').toLowerCase();
+    html += `<section class="group" id="${anchor}" data-search-blob="">`;
+    const displayHeader = groupName === 'Other' ? collectionName : groupName;
+    html += `<h2>${displayHeader}</h2>`;
+    html += `<div class="table-wrap"><table><thead><tr><th>Token</th><th>CSS variable</th>`;
+    if (modes.length > 1) {
+      for (const m of modes) html += `<th data-mode="${m}">${m}</th>`;
+    } else {
+      html += `<th>Value</th>`;
+    }
+    html += `<th>Notes</th></tr></thead><tbody>`;
+    for (const v of vars) {
+      const searchBlob = (v.name + ' ' + (v.codeSyntax || '')).toLowerCase();
+      html += `<tr data-search="${searchBlob}" class="${rowClass(v.status)}">`;
+      html += `<td class="name">${leafName(v.name)}${badgesFor(v.status)}</td>`;
+      html += `<td><span class="code">${v.codeSyntax || '—'}</span></td>`;
+      for (const m of modes) {
+        html += `<td data-mode="${m}">${renderAliasOrValue(v.valuesByMode[m], v.type)}</td>`;
+      }
+      let descHtml = v.description || '';
+      if (v.note) descHtml += `<span class="note">${v.note}</span>`;
+      html += `<td class="desc">${descHtml}</td>`;
+      html += `</tr>`;
+    }
+    html += `</tbody></table></div></section>`;
+  }
+  return html;
+}
+
+function render() {
+  const groupsEl = document.getElementById('groups');
+  groupsEl.innerHTML =
+    buildCollectionHTML('Storefront Tokens', STOREFRONT_MODES, storefrontTokens) +
+    buildCollectionHTML('Spacing Scale', SPACING_MODES, spacingTokens);
+
+  const nav = document.getElementById('nav');
+  nav.innerHTML = '<a href="#changelog">Changelog</a>' +
+    '<div class="nav-heading">Token groups</div>' +
+    Array.from(groupsEl.querySelectorAll('section.group')).map(s =>
+      `<a href="#${s.id}">${s.querySelector('h2').textContent}</a>`
+    ).join('');
+}
+
+function setupModeToggle() {
+  const toggle = document.getElementById('modeToggle');
+  let current = 'all';
+  const modes = ['all', ...STOREFRONT_MODES];
+  toggle.innerHTML = modes.map(m => `<button data-mode="${m}" class="${m === 'all' ? 'active' : ''}">${m === 'all' ? 'All brands' : m}</button>`).join('');
+  toggle.addEventListener('click', (e) => {
+    const btn = e.target.closest('button');
+    if (!btn) return;
+    current = btn.dataset.mode;
+    toggle.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
+    document.querySelectorAll('td[data-mode], th[data-mode]').forEach(cell => {
+      if (current === 'all') { cell.classList.remove('hidden'); }
+      else { cell.classList.toggle('hidden', cell.dataset.mode !== current); }
+    });
+  });
+}
+
+function setupSearch() {
+  const input = document.getElementById('search');
+  input.addEventListener('input', () => {
+    const q = input.value.trim().toLowerCase();
+    document.querySelectorAll('table tbody tr').forEach(row => {
+      const match = !q || row.dataset.search.includes(q);
+      row.classList.toggle('hidden', !match);
+    });
+    document.querySelectorAll('section.group').forEach(sec => {
+      const anyVisible = Array.from(sec.querySelectorAll('tbody tr')).some(r => !r.classList.contains('hidden'));
+      sec.classList.toggle('hidden', !anyVisible);
+    });
+  });
+}
+
+render();
+setupModeToggle();
+setupSearch();
+</script>
+
+</body>
+</html>
